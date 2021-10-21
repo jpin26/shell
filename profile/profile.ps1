@@ -2,6 +2,10 @@
 
 using namespace System.Management.Automation
 using namespace System.Management.Automation.Language
+
+$profileFile = '' + $PROFILE.CurrentUserCurrentHost
+$profilePath = $profileFile.Replace('Microsoft.PowerShell_profile.ps1', '')
+$themeFile = $profilePath + 'minimal.json'
  
 if ($host.Name -eq 'ConsoleHost')
 {
@@ -9,9 +13,9 @@ if ($host.Name -eq 'ConsoleHost')
 }
 Import-Module -Name Terminal-Icons
 Import-Module oh-my-posh
+Import-Module z
 
-Set-PoshPrompt -Theme e:\shell\themes\minimal.json
-
+Set-PoshPrompt -Theme $themeFile
 
 Register-ArgumentCompleter -Native -CommandName winget -ScriptBlock {
     param($wordToComplete, $commandAst, $cursorPosition)
@@ -668,7 +672,7 @@ Set-PSReadLineKeyHandler -Key Alt+a `
 
 
 Set-PSReadLineOption -PredictionSource History
-#Set-PSReadLineOption -PredictionViewStyle ListView
+Set-PSReadLineOption -PredictionViewStyle ListView
 Set-PSReadLineOption -EditMode Windows
 
 
