@@ -3,6 +3,27 @@
 using namespace System.Management.Automation
 using namespace System.Management.Automation.Language
 
+Set-Alias -Name echof -Value echoFile
+
+function echoFile([string]$filePath=".")
+{
+    Get-Content -Path $filePath
+}
+
+Set-Alias -Name k -Value kubectl
+Set-Alias -Name kaf -Value kubernetesApplyFile
+Set-Alias -Name kdf -Value kubernetesDeleteFile
+
+function kubernetesApplyFile([string]$filePath=".")
+{
+    kubectl apply -f $filePath
+}
+
+function kubernetesDeleteFile([string]$filePath=".")
+{
+    kubectl delete -f $filePath
+}
+
 $profileFile = '' + $PROFILE.CurrentUserCurrentHost
 $profilePath = $profileFile.Replace('Microsoft.PowerShell_profile.ps1', '')
 $themeFile = $profilePath + 'minimal.json'
@@ -687,11 +708,11 @@ Set-PSReadLineKeyHandler -Key Ctrl+Shift+b `
     [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
 }
 
-Set-PSReadLineKeyHandler -Key Ctrl+Shift+t `
-                         -BriefDescription BuildCurrentDirectory `
-                         -LongDescription "Build the current directory" `
+Set-PSReadLineKeyHandler -Key Ctrl+Shift+LeftArrow `
+                         -BriefDescription UpOneFolder `
+                         -LongDescription "Goes up one folder" `
                          -ScriptBlock {
     [Microsoft.PowerShell.PSConsoleReadLine]::RevertLine()
-    [Microsoft.PowerShell.PSConsoleReadLine]::Insert("dotnet test")
+    [Microsoft.PowerShell.PSConsoleReadLine]::Insert("cd ..")
     [Microsoft.PowerShell.PSConsoleReadLine]::AcceptLine()
 }
